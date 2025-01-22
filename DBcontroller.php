@@ -75,7 +75,7 @@ class dbController {
         }
 
         // Возвращаем JSON
-        return json_encode($formattedResult, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
+        return $formattedResult;
     }
 }
 ?>

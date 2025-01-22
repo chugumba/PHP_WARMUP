@@ -15,6 +15,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $db = new dbController();
     $res = $db->getRoute($start, $stop, $startName, $stopName);
 
-    echo $res;
+    $response  = [
+        "from" => $startName,
+        "to" => $stopName,
+        "buses" => $res
+    ];
+
+    echo json_encode($response, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT);
 }
 ?>

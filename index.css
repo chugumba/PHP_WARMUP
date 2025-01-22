@@ -7,3 +7,17 @@ main {
     padding-left: 10%;
     padding-right: 10%;
 }
+.starting-stop {
+    padding-top: 1rem;
+}
+.last-stop {
+    padding-top: 1rem;
+}
+.send-btn-container {
+    padding-top: 1rem;
+}
+#send-btn {
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}

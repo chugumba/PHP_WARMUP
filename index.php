@@ -66,12 +66,19 @@
                     }
                 });
             });
+            $('#first-stop-select').trigger('change')
         });
 
         // Прячем точку отправления в точках назначения
         $('#first-stop-select').on('change', function() {
             $(`#second-stop-select option`).show()  
             $(`#second-stop-select option[value="${$('#first-stop-select').val()}"]`).hide();
+            if($('#first-stop-select').find(':selected').val() == $('#second-stop-select').find(':selected').val()) {
+                let firstVisibleOption = $('#second-stop-select option').filter(function() {
+                    return $(this).css('display') !== 'none';
+                }).first();
+                $('#second-stop-select').val(firstVisibleOption.val())   
+            }
         })
     </script>
 </body>

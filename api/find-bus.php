@@ -14,6 +14,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     $db = new dbController();
     $res = $db->getRoute($start, $stop, $startName, $stopName);
+    if(empty($res)) {
+        echo 'Такого маршрута не существует!';
+        exit;
+    }
 
     $response  = [
         "from" => $startName,

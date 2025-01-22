@@ -46,12 +46,16 @@
                 // Собираем данные из select
                 const select1 = $('#first-stop-select').val();
                 const select2 = $('#second-stop-select').val();
+                const select1Name = $('#first-stop-select').find(':selected').text();
+                const select2Name = $('#second-stop-select').find(':selected').text();
                 $.ajax({
                     url: 'api/find-bus.php',
                     type: 'POST',
                     data: {
                         start: select1,
-                        stop: select2
+                        stop: select2,
+                        startName: select1Name,
+                        stopName: select2Name,
                     },
                     success: function (response) {
                         console.log(response)

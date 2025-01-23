@@ -1,5 +1,7 @@
 <?php
-require_once '../DBcontroller.php';
+require_once './DBcontroller.php';
+
+header('Content-Type: application/json; charset=utf-8');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $start = $_POST['start'];
@@ -13,7 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     $db = new dbController();
-    $res = $db->getRoute($start, $stop, $startName, $stopName);
+    $res = $db->getRoute($start, $stop);
     if(empty($res)) {
         echo 'Такого маршрута не существует!';
         exit;

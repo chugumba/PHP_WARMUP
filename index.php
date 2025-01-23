@@ -26,7 +26,8 @@
             </select>
         </div>
         <div class="send-btn-container">
-            <button id="send-btn" type="button" class="btn btn-primary">Проложить маршрут</button>
+            <button id="send-btn" type="button" class="btns btn btn-primary">Проложить маршрут</button>
+            <a href="/change-routes.php" class="btn btn-info btns" role="button">Отредактировать маршруты</a>
         </div>
         <pre class="result-container">
         </pre>

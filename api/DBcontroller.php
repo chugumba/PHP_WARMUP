@@ -69,7 +69,8 @@ class dbController {
                                 JOIN buses.buses b ON r.bus = b.bus_id
                                 JOIN buses.stops s ON s.stop_id = r.stop
                                 WHERE r1.stop_num < r2.stop_num
-                                AND r.stop_num = (SELECT MAX(r4.stop_num) FROM buses.routes r4 WHERE r4.bus = r.bus AND r4.dir = r.dir)");
+                                AND r.stop_num = (SELECT MAX(r4.stop_num) FROM buses.routes r4 WHERE r4.bus = r.bus AND r4.dir = r.dir)
+                                ORDER BY r.bus");
 
         if (empty($res)) {
             return 'Нет таких автобусов!';

@@ -154,5 +154,26 @@ class dbController {
             return 'Ошибка: ' .$e->getMessage();
         }
     }
+    // Обновляем порядок станций в маршруте
+    public function updStops ($bus,$stops,$dir) {
+        try {
+            $res = json_decode($stops, true);
+            return print_r($res);
+        } catch (Exception $e) {
+            return 'Ошибка: ' .$e->getMessage();
+        }
+    }
+    // Удаляем остановку из маршрута
+    public function delStop ($routeId) {
+        try {
+            // Можно заменить на UPDATE на триггер
+            $res = $this->sendQuery("UPDATE buses.routes SET stop_num = stop_num - 1 WHERE bus = 1 and dir = 'forward' 
+                                    and stop_num > (select stop_num from buses.routes where route_id = $routeId);
+                                    DELETE FROM buses.routes WHERE route_id = $routeId;");
+            return 'Успех!'; 
+        } catch (Exception $e) {
+            return 'Ошибка: ' .$e->getMessage();
+        }
+    }
 }
 ?>

@@ -92,5 +92,40 @@ class dbController {
         }
         return $formattedResult;
     }
+    // Получаем все существующие маршруты
+    public function getWholeRoutes() {
+        
+        $res = $this->sendQuery("SELECT json_agg(grouped_data) AS grouped_results
+                                FROM (
+                                    SELECT bus, dir,
+                                        (SELECT bus_name FROM buses.buses WHERE buses.bus_id = routes.bus LIMIT 1) AS bus_name,
+                                        json_agg(
+                                            json_build_object(
+                                                'route_id', routes.route_id,
+                                                'stop_num', routes.stop_num,
+                                                'stop', routes.stop,
+                                                'stop_name', stops.stop_name
+                                            ) ORDER BY routes.stop_num
+                                        ) AS data
+                                    FROM buses.routes AS routes
+                                    JOIN buses.stops ON routes.stop = stops.stop_id
+                                    GROUP BY bus, dir
+                                    ORDER BY bus
+                                ) AS grouped_data");
+
+        if (empty($res)) {
+            return 'Нет автобусов!';
+        }
+        
+        // Форматируем ответ
+        $formattedResult = [];
+
+        foreach ($res as $row) {
+            // Предполагаем, что ответ - всегда одна строка 
+            $formattedResult = json_decode($row['grouped_results']);
+        }
+        
+        return $formattedResult;
+    }
 }
 ?>

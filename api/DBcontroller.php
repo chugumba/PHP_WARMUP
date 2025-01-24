@@ -114,17 +114,12 @@ class dbController {
                                 ) AS grouped_data");
 
         if (empty($res)) {
-            return 'Нет автобусов!';
+            return 'Нет путей!';
         }
         
-        // Форматируем ответ
-        $formattedResult = [];
+        // Предполагаем, что получается только json 1-ой строке
+        $formattedResult = $res[0]['grouped_results'];
 
-        foreach ($res as $row) {
-            // Предполагаем, что ответ - всегда одна строка 
-            $formattedResult = json_decode($row['grouped_results']);
-        }
-        
         return $formattedResult;
     }
 }

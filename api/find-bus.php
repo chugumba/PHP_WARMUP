@@ -10,7 +10,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stopName = $_POST['stopName'];
     
     if (empty($start) || empty($stop) || empty($startName) || empty($stopName)) {
-        echo 'Both starting and ending stops are required.';
+        echo 'Были переданные не все данные!.';
         exit;
     }
 

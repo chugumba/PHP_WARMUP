@@ -14,17 +14,16 @@ class dbController {
         $conn = pg_connect($conn_string);
 
         if (!$conn) {
-            echo "Ошибка подключения к базе данных.";
-            exit;
+            return "Ошибка подключения к базе данных.";
         }
         
         // Выполнение запроса
         $result = pg_query($conn, $sql);
 
         if (!$result) {
-            echo "Ошибка выполнения SQL-запроса: " . pg_last_error($conn);
+            $err = "Ошибка выполнения SQL-запроса: " . pg_last_error($conn);
             pg_close($conn);
-            exit;
+            return $err;
         }
 
         $rows = [];
@@ -120,6 +119,29 @@ class dbController {
         // Предполагаем, что получается только json 1-ой строке
         $formattedResult = $res[0]['grouped_results'];
 
+        return $formattedResult;
+    }
+
+    public function addStop($bus, $stop, $dir) {
+        // Проверка на колиззии есть внутри запроса
+        $res = $this->sendQuery("INSERT INTO buses.routes (bus, stop, dir, stop_num)
+                                SELECT $bus, $stop, $dir, 
+                                (
+                                    SELECT MAX(stop_num)+1 
+                                    FROM buses.routes 
+                                    WHERE bus = $bus AND dir = $dir
+                                ) WHERE NOT EXISTS 
+                                (
+                                    SELECT * 
+                                    FROM buses.routes
+                                    WHERE bus = $bus AND dir = $dir AND stop = $stop
+                                )");
+
+        if (empty($res)) {
+            return 'Нет путей!';
+        }
+        
+        $formattedResult = $res[0];
         return $formattedResult;
     }
 }

@@ -6,8 +6,8 @@ class dbController {
     private $user = 'max';
     private $password = '12345';
 
-
-    function sendQuery ($sql) {
+    // Отправка запроса к БД
+    private function sendQuery ($sql) {
         // Подключаемся
         $conn_string = "host={$this->host} port={$this->port} dbname={$this->dbname} user={$this->user} password={$this->password}";
 
@@ -37,7 +37,7 @@ class dbController {
 
         return $rows;
     } 
-
+    // Получаем остановки 
     public function getStops() {
         $res = $this->sendQuery("SELECT * FROM buses.stops
         ORDER BY stop_name ASC");
@@ -46,7 +46,7 @@ class dbController {
             echo "<option value=\"{$stop['stop_id']}\">Ул. {$stop['stop_name']}</option>";
         }
     }
-    
+    // Получаем маршрут автобуса
     public function getRoute($start, $stop) {
         $res = $this->sendQuery("SELECT (b.bus_name || ' в сторону ост. ' || s.stop_name) AS route,
                                 (

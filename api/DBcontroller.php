@@ -2,7 +2,7 @@
 class dbController {
     private $host = 'localhost';
     private $port = '5432';
-    private $dbname = 'postgres';
+    private $dbname = 'bus';
     private $user = 'max';
     private $password = '12345';
 

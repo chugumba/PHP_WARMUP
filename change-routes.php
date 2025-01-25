@@ -162,6 +162,28 @@
         }
     }
 
+    $('main').on('click', '.upd-btn', function () {
+        const parentDiv = $(this).parent().parent();
+        const routes = [];
+
+        parentDiv.find('ul li').each(function () {
+            routes.push($(this).data('routeId'))
+        })
+        
+        $.ajax({
+                url: 'api/all-routes.php/upd',
+                type: 'POST',
+                data: {route: JSON.stringify(routes)},
+                success: function (response) {
+                    alert('Маршрут обновлён')
+                    window.location.reload();
+                },
+                error: function (e) {
+                    alert('Ошибка при обработке запроса.' + e);
+                }
+            });
+
+    })
 
  </script>
 </body>

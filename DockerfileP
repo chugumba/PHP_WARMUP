@@ -1,0 +1,6 @@
+# Берём обрах Постгреса
+FROM postgres:17
+# Копируем дамп БД в контейнер
+COPY ./src/dumpdir /docker-entrypoint-initdb.d/
+# RUN pg_restore -U max -h localhost -d bus /docker-entrypoint-initdb.d
+EXPOSE 5432

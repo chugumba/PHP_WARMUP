@@ -39,22 +39,25 @@
 
             element.data.forEach(station => {
                 stations += `
-                <li id="${station.route_id}" class="ui-state-default">
-                    <button id="del-btn" type="button" class="btns btn btn-danger"><span class="ui-icon ui-icon-trash  "></span></button>
-                    Ост. ${station.stop_name} <span id="${station.stop}" class="ui-icon ui-icon-arrowthick-1-e"></span>
+                <li 
+                data-route-id="${station.route_id}"
+                data-stop-id="${station.stop}" 
+                class="ui-state-default">
+                    <button data-route-id="${station.route_id}" type="button" class="btns btn btn-danger"><span class="ui-icon ui-icon-trash  "></span></button>
+                    Ост. ${station.stop_name} <span class="ui-icon ui-icon-arrowthick-1-e"></span>
                 </li>`
             })
 
             $('main').append(
-                `<div class="route" id="${element.bus}">
+                `<div class="route" data-bus-id="${element.bus}">
                     <h1>${element.bus_name} ${element.dir == 'forward' ? "Вперёд" : "Назад"}</h1>
                     <ul class="sortable">
                         ${stations}
                     </ul>
                     
                     <div>
-                        <button id="upd-btn" type="button" class="btns btn btn-primary">Обновить порядок</button>
-                        <button id="add-btn" type="button" class="btns btn btn-success">Добавить остановку</button>
+                        <button type="button" class="upd-btn btns btn btn-primary">Обновить порядок</button>
+                        <button type="button" class="add-btn btns btn btn-success">Добавить остановку</button>
                     </div>
                 </div>`
             )
@@ -76,6 +79,23 @@
             }
         });
     })
+
+    $('main').on('click', '.btn-danger', function () {
+        const dataAttributes = $(this).parent().data('routeId'); 
+
+        $.ajax({
+            url: 'api/all-routes.php/del',
+            type: 'POST',
+            data: {ids: dataAttributes},
+            success: function (response) {
+                alert('Удалена точка маршрута')
+                window.location.reload();
+            },
+            error: function () {
+                alert('Ошибка при обработке запроса.');
+            }
+        });
+    });
  </script>
 </body>
 </html>

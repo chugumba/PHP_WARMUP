@@ -12,6 +12,12 @@ docker exec -it db pg_restore -U max -h localhost -d bus /docker-entrypoint-init
 4) Открыть приложение в браузере по адресу http://localhost:8080/ . <br />
 5) Чтобы проверить программу стоит выбрать маршрут от ул. Попова до ул. Ленина. <br />
 
-Если возникают проблемы с портами, из можно поменять в файле docker-compose.yml (Меннять только выделенную часть) <br />
+Если возникают проблемы с портами, из можно поменять в файле docker-compose.yml (Менять только выделенную часть) <br />
   ports:
-      - "**5432**:5432" # Ставим порт 5432
+      - "**5432**:5432" # Ставим порт 5432 <br />
+
+В случае неудачного запуска, попробуйте выполнить следующие команды: <br />
+  docker-compose down --volumes --rmi all   **(ОСТОРОЖНО!!!!!!!!!!!!!!!!!!!!!!!!!!!)** <br />
+  docker-compose build --no-cache <br />
+  docker-compose up -d <br />
+  docker exec -it db pg_restore -U max -h localhost -d bus /docker-entrypoint-initdb.d <br />

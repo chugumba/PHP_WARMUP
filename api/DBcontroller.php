@@ -143,16 +143,16 @@ class dbController {
         try {
             // Проверка на колиззии есть внутри запроса
             $res = $this->sendQuery("INSERT INTO buses.routes (bus, stop, dir, stop_num)
-                                    SELECT $bus, $stop, $dir, 
+                                    SELECT $bus, $stop, '$dir', 
                                     (
                                         SELECT MAX(stop_num)+1 
                                         FROM buses.routes 
-                                        WHERE bus = $bus AND dir = $dir
+                                        WHERE bus = $bus AND dir = '$dir'
                                     ) WHERE NOT EXISTS 
                                     (
                                         SELECT * 
                                         FROM buses.routes
-                                        WHERE bus = $bus AND dir = $dir AND stop = $stop
+                                        WHERE bus = $bus AND dir = '$dir' AND stop = $stop
                                     )");
             return 'Успех!'; 
         } catch (Exception $e) {

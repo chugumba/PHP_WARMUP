@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit;
     }
 
-    // Добавление остановки
+    // Удаление остановки
     if(strpos($requestUri, '/api/all-routes.php/del') !== false) {
         $stops = $_POST['ids'];
         // Проверяем все ли данные на месте

@@ -41,15 +41,17 @@
                 stations += `
                 <li 
                 data-route-id="${station.route_id}"
-                data-stop-id="${station.stop}" 
+                data-stop-id="${station.stop}"
                 class="ui-state-default">
-                    <button data-route-id="${station.route_id}" type="button" class="btns btn btn-danger"><span class="ui-icon ui-icon-trash  "></span></button>
+                    <button data-route-id="${station.route_id}" type="button" class="del-btn btns btn btn-danger"><span class="ui-icon ui-icon-trash  "></span></button>
                     Ост. ${station.stop_name} <span class="ui-icon ui-icon-arrowthick-1-e"></span>
                 </li>`
             })
 
             $('main').append(
-                `<div class="route" data-bus-id="${element.bus}">
+                `<div class="route" 
+                data-bus-id="${element.bus}"
+                data-dir="${element.dir}">
                     <h1>${element.bus_name} ${element.dir == 'forward' ? "Вперёд" : "Назад"}</h1>
                     <ul class="sortable">
                         ${stations}
@@ -65,7 +67,7 @@
         
         $( ".sortable" ).sortable();
     }
-
+    // Загрузка данных
     $(document).ready(function () {
         $.ajax({
             url: 'api/all-routes.php',
@@ -79,8 +81,8 @@
             }
         });
     })
-
-    $('main').on('click', '.btn-danger', function () {
+    // Удаление записи
+    $('main').on('click', '.del-btn', function () {
         const dataAttributes = $(this).parent().data('routeId'); 
 
         $.ajax({
@@ -96,6 +98,71 @@
             }
         });
     });
+    // Добавление записи
+    $('main').on('click', '.add-btn', function () {
+        $(this).hide()
+        const parentDiv = $(this).parent();
+        if(parentDiv.find('select').length > 0) 
+        {
+            return;
+        }
+        let existingStops = []
+        parentDiv.parent().find('li').each(function () {
+            existingStops.push($(this).data('stopId'));
+        });
+
+        parentDiv.append( 
+            `<select>
+                <?php $db->getStops();?>
+            </select>`+
+            `<button class="btns btn btn-danger"
+            onclick="$(this).parent().find('select').remove(); 
+            $('.add-btn').show(); 
+            $(this).remove()
+            $('.add-confirm').remove()">
+                Отмена
+            </button>`+
+            `<button class='add-confirm btn btn-success'
+            onclick='addRouteStop($(this).parent())'>
+                Подтвердить
+            </button>`
+        )
+        parentDiv.find('select option').each(function () {
+            const optionValue = parseInt($(this).val());
+            if (existingStops.includes(optionValue)) {
+                $(this).remove();
+            }
+        });
+    })
+
+    function addRouteStop(parentDiv) {
+        const stopsSel = parentDiv.find('select');
+
+        if (stopsSel.length < 1) {
+            alert('Не выбраны значения!')
+        } else {
+            const selectedValue = stopsSel.val();
+            const direction = parentDiv.parent().data('dir')
+            const bus = parentDiv.parent().data('busId')
+            $.ajax({
+                url: 'api/all-routes.php/add',
+                type: 'POST',
+                data: {bus: bus, ids: selectedValue, dir: direction},
+                success: function (response) {
+                    console.log(response)
+                    alert('Добавлена точка маршрута')
+                    window.location.reload();
+                },
+                error: function () {
+                    alert('Ошибка при обработке запроса.');
+                }
+            });
+
+            return selectedValue;
+        }
+    }
+
+
  </script>
 </body>
 </html>

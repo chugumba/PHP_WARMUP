@@ -5,9 +5,9 @@
 1) Установить Docker на ПК на котором будет запускаться проект.
 2) Открыть в терминале папку с проектом.
 3) Выполнить команды: 
-docker-compose build
-docker-compose up -d
-docker exec -it db pg_restore -U max -h localhost -d bus /docker-entrypoint-initdb.d
+docker-compose build <br />
+docker-compose up -d <br />
+docker exec -it db pg_restore -U max -h localhost -d bus /docker-entrypoint-initdb.d <br />
 (последняя команда нужна для выгрузки дампа БД в контейнер)
 4) Открыть приложение в браузере по адресу http://localhost:8080/ .
 5) Чтобы проверить программу стоит выбрать маршрут от ул. Попова до ул. Ленина.

@@ -1,5 +1,5 @@
 **Схема БД**
-https://github.com/chugumba/TEST_TASK_PHP/blob/master/db_schema.png
+![alt text](https://github.com/chugumba/TEST_TASK_PHP/blob/master/db_schema.png?raw=true)
 
 Чтобы запустить данное веб-приложение необходимо:
 1) Установить Docker на ПК на котором будет запускаться проект.

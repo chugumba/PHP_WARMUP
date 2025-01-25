@@ -26,6 +26,11 @@ class dbController {
             throw new Exception($err);
         }
 
+        if(pg_affected_rows($result) < 1) {
+            pg_close($conn);
+            throw new Exception('Не внесено изменений!');
+        }
+
         $rows = [];
         while ($row = pg_fetch_assoc($result)) {
             $rows[] = $row;
@@ -155,10 +160,31 @@ class dbController {
         }
     }
     // Обновляем порядок станций в маршруте
-    public function updStops ($bus,$stops,$dir) {
+    public function updStop ($route) {
         try {
-            $res = json_decode($stops, true);
-            return print_r($res);
+            $route = json_decode($route, true);
+
+            if(count($route) < 1) {
+                return 'Нет остановок!';
+            }
+            // Формируем запрос
+            $updates = '';
+            $ids = '';
+            foreach ($route as $index => $id){
+                $updates .= "when route_id = $id then $index+1 \n";
+                $ids .= "$id,"; 
+            }
+            // Убираем лишнюю запятую
+            $ids = trim($ids, ",");
+
+            $res = $this->sendQuery ("UPDATE buses.routes
+                                    SET stop_num = CASE 
+                                        $updates
+                                        ELSE 9999
+                                    END
+                                    WHERE route_id IN ($ids)");
+
+            return $res;
         } catch (Exception $e) {
             return 'Ошибка: ' .$e->getMessage();
         }
@@ -166,7 +192,7 @@ class dbController {
     // Удаляем остановку из маршрута
     public function delStop ($routeId) {
         try {
-            // Можно заменить на UPDATE на триггер
+            // Можно заменить UPDATE на триггер
             $res = $this->sendQuery("UPDATE buses.routes SET stop_num = stop_num - 1 WHERE bus = 1 and dir = 'forward' 
                                     and stop_num > (select stop_num from buses.routes where route_id = $routeId);
                                     DELETE FROM buses.routes WHERE route_id = $routeId;");

@@ -31,17 +31,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Обновление пути
     if(strpos($requestUri, '/api/all-routes.php/upd') !== false) {
-        $bus = $_POST['bus'];
-        $stops = $_POST['ids'];
-        $dir = $_POST['dir'];
+        $route = $_POST['route'];
         // Проверяем все ли данные на месте
-        if (empty($bus) || empty($stops) || empty($dir)) {
+        if (empty($route)) {
             header("HTTP/1.1 422 Unprocessable Entity");
             echo 'Были переданные не все данные!';
             exit;
         }
 
-        $res = $db->updStops($bus,$stops,$dir);
+        $res = $db->updStop($route);
         echo $res;
         exit;
     }

@@ -2,6 +2,7 @@ version: '3.9'
 
 services:
   app:
+    container_name: php
     build:
       context: .
       dockerfile: Dockerfile
@@ -13,6 +14,7 @@ services:
       - db
 
   db:
+    container_name: db
     build: 
       context: .
       dockerfile: DockerfileP
@@ -21,7 +23,7 @@ services:
       POSTGRES_PASSWORD: 12345
       POSTGRES_DB: bus
     ports:
-      - "5432:5432" # Ставим порт 5432
+      - "5500:5500" # Ставим порт 5500
     volumes:
       - postgres-data:/var/lib/postgresql/data
 
